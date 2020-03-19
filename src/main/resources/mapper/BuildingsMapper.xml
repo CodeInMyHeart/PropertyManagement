@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.sjzc.propertymanagment.mapper.BuildingsMapper">
+
+
+    <sql id="sql_updateCondition">
+        <if test="build_number != null">build_number=#{build_number},</if>
+        <if test="build_type != null">build_type=#{build_type,}</if>
+        <if test="build_direction != null">build_direction=#{build_direction},</if>
+        <if test="build_units != null">build_units=#{build_units},</if>
+        <if test="build_layers != null">build_layers=#{build_layers},</if>
+        <if test="build_community_id != null">build_community_id=#{build_community_id},</if>
+    </sql>
+
+    <insert id="addBuilding" parameterType="cn.edu.sjzc.propertymanagment.pojo.Buildings" useGeneratedKeys="true"  keyProperty="build_id">
+        insert into buildings
+            (build_number,build_type,build_direction,build_units,
+            build_layers,build_community_id)
+            values
+            (#{build_number},#{build_type},#{build_direction},#{build_units},
+            #{build_layers},#{build_community_id})
+    </insert>
+
+    <delete id="deleteBuildingId" parameterType="integer">
+        delete from buildings where build_id=#{build_id}
+    </delete>
+
+    <update id="updateBuilding" parameterType="cn.edu.sjzc.propertymanagment.pojo.Buildings">
+        update  Buildings
+        <trim prefix="set" suffixOverrides=",">
+          <include refid="sql_updateCondition"></include>
+        </trim>
+        where build_id=#{build_id}
+    </update>
+
+    <select id="findBuildingById" parameterType="integer" resultType="cn.edu.sjzc.propertymanagment.pojo.Buildings">
+        select * from Buildings where build_id=#{build_id}
+    </select>
+
+    <select id="findAllBuildings" resultType="cn.edu.sjzc.propertymanagment.pojo.Buildings">
+        select * from Buildings
+    </select>
+
+</mapper>

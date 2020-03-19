@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.sjzc.propertymanagment.mapper.RoomsMapper">
+
+
+    <sql id="sql_findCondition" >
+        <if test="room_id != null">and room_id=#{room_id}</if>
+        <if test="room_build_bumber != null">and room_build_bumber=#{room_build_bumber}</if>
+        <if test="room_unit != null">and room_unit=#{room_unit}</if>
+        <if test="room_number != null">and room_number=#{room_number}</if>
+        <if test="room_layer != null">and room_layer=#{room_layer}</if>
+        <if test="room_area != null">and room_area=#{room_area}</if>
+        <if test="room_type != null">and room_type=#{room_type}</if>
+        <if test="room_date != null">and room_date=#{room_date}</if>
+        <if test="room_status != null">and room_status#{room_status}</if>
+        <if test="room_describ != null">and room_describ=#{room_describ}</if>
+        <if test="room_owner_id != null">and room_owner_id=#{room_owner_id}</if>
+        <if test="room_build_id != null">and room_build_id=#{room_build_id}</if>
+    </sql>
+
+    <sql id="sql_updateById">
+        <if test="room_build_bumber != null">room_build_bumber=#{room_build_bumber},</if>
+        <if test="room_unit != null">room_unit=#{room_unit},</if>
+        <if test="room_number != null">room_number=#{room_number},</if>
+        <if test="room_layer != null">room_layer=#{room_layer},</if>
+        <if test="room_area != null">room_area=#{room_area},</if>
+        <if test="room_type != null">room_type=#{room_type},</if>
+        <if test="room_date !=null">room_date=#{room_date},</if>
+        <if test="room_status != null">room_status=#{room_status},</if>
+        <if test="room_describ != null">room_describ=#{room_describ},</if>
+        <if test="room_owner_id !=null">room_owner_id=#{room_owner_id},</if>
+        <if test="room_build_id != null">room_build_id=#{room_build_id},</if>
+    </sql>
+    <insert id="addRoom" parameterType="cn.edu.sjzc.propertymanagment.pojo.Rooms">
+        insert into rooms
+            (room_id,room_build_bumber,room_unit,room_number,room_layer,
+            room_area,room_type,room_date,room_status,room_describ,room_owner_id,room_build_id)
+            VALUES
+            (#{room_id},#{room_build_bumber},#{room_unit},#{room_number},#{room_layer},
+            #{room_area},#{room_type},#{room_date},#{room_status},#{room_describ},#{room_owner_id},#{room_build_id});
+        <selectKey resultType="integer" keyProperty="room_id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <delete id="deleteRoomById" parameterType="integer">
+        delete from rooms where room_id=#{room_id}
+    </delete>
+
+    <update id="updateRoomById" parameterType="cn.edu.sjzc.propertymanagment.pojo.Rooms">
+        update rooms
+        <trim prefix="set" suffixOverrides=",">
+            <include refid="sql_updateById"></include>
+        </trim>
+        where room_id=#{room_id}
+    </update>
+
+    <select id="findAllRooms" resultType="cn.edu.sjzc.propertymanagment.pojo.Rooms">
+        select * from rooms
+    </select>
+
+    <select id="findRoomById" parameterType="integer" resultType="cn.edu.sjzc.propertymanagment.pojo.Rooms">
+        select * from rooms where room_id=#{room_id}
+    </select>
+
+    <select id="findRoomByRoomNumber" parameterType="string" resultType="cn.edu.sjzc.propertymanagment.pojo.Rooms">
+        select * from rooms where room_number=#{room_number}
+    </select>
+
+    <select id="findRoomByCondition" parameterType="cn.edu.sjzc.propertymanagment.pojo.Rooms" resultType="cn.edu.sjzc.propertymanagment.pojo.Rooms">
+        select * from rooms
+        <where>
+            <include refid="sql_findCondition"></include>
+        </where>
+    </select>
+
+</mapper>
